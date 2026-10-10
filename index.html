@@ -1,0 +1,3618 @@
+ <!DOTYPE.html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>TheNotesTutor (TNT)</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f7fb;
+  --card:#fff;
+  --text:#172033;
+  --muted:#687386;
+  --border:#e2e7ef;
+  --primary:#4f46e5;
+  --primary2:#7c3aed;
+  --danger:#ef4444;
+  --success:#10b981;
+  --warning:#f59e0b;
+  --input:#f8fafc;
+  --shadow:0 8px 25px rgba(0,0,0,.08)
+}
+body.dark{
+  --bg:#0f172a;
+  --card:#1e293b;
+  --text:#f8fafc;
+  --muted:#94a3b8;
+  --border:#334155;
+  --input:#111827;
+  --shadow:0 8px 25px rgba(0,0,0,.35)
+}
+body{
+  font-family:Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  padding-bottom:80px
+}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* AUTH */
+.auth-screen{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed)
+}
+.auth-card{
+  width:min(430px,100%);
+  background:var(--card);
+  color:var(--text);
+  border-radius:22px;
+  padding:30px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25)
+}
+.auth-logo{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:25px
+}
+.logo-box{
+  width:50px;
+  height:50px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  font-weight:bold
+}
+.auth-card h1{margin-bottom:7px}
+.auth-card p{color:var(--muted);margin-bottom:20px}
+.form-group{margin-bottom:14px}
+.form-group label{
+  display:block;
+  font-size:13px;
+  font-weight:bold;
+  margin-bottom:6px
+}
+.form-input{
+  width:100%;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  outline:none;
+  background:var(--input);
+  color:var(--text)
+}
+.form-input:focus{border-color:var(--primary)}
+.primary-btn{
+  border:0;
+  background:var(--primary);
+  color:white;
+  padding:12px 18px;
+  border-radius:10px;
+  font-weight:bold
+}
+.auth-submit{
+  width:100%;
+  margin-top:8px
+}
+.auth-switch{
+  text-align:center;
+  margin-top:18px;
+  color:var(--muted);
+  font-size:14px
+}
+.auth-switch button{
+  border:0;
+  background:none;
+  color:var(--primary);
+  font-weight:bold
+}
+.auth-error{
+  background:#fee2e2;
+  color:#991b1b;
+  padding:10px;
+  border-radius:8px;
+  margin-bottom:13px;
+  font-size:13px
+}
+
+/* SIDEBAR */
+.sidebar{
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
+  width:245px;
+  background:var(--card);
+  border-right:1px solid var(--border);
+  padding:22px 14px;
+  z-index:20
+}
+.logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:bold;
+  margin-bottom:30px;
+  padding:0 8px
+}
+.logo .logo-box{width:42px;height:42px;font-size:12px}
+.nav-title{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  margin:18px 10px 7px
+}
+.nav-btn{
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:9px;
+  background:none;
+  color:var(--text);
+  text-align:left;
+  margin-bottom:3px
+}
+.nav-btn:hover{
+  background:rgba(79,70,229,.1);
+  color:var(--primary)
+}
+.user-box{
+  position:absolute;
+  bottom:20px;
+  left:14px;
+  right:14px;
+  padding:12px;
+  border-top:1px solid var(--border);
+  font-size:13px
+}
+.user-box strong{display:block}
+.user-box small{color:var(--muted)}
+
+/* MAIN */
+.main{
+  margin-left:245px;
+  padding:28px;
+  max-width:1600px
+}
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:20px
+}
+.page-title h1{font-size:29px}
+.page-title h1 span{color:var(--primary)}
+.page-title p{color:var(--muted);margin-top:5px}
+.top-actions{display:flex;gap:8px}
+.icon-btn{
+  width:43px;
+  height:43px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  border-radius:10px
+}
+
+/* SEARCH */
+.search-bar{
+  display:flex;
+  gap:8px;
+  align-items:center;
+  padding:7px 8px 7px 14px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:15px;
+  box-shadow:var(--shadow)
+}
+.search-bar input{
+  flex:1;
+  border:0;
+  outline:0;
+  background:none;
+  color:var(--text);
+  min-width:0
+}
+.search-btn,.voice-btn{
+  width:42px;
+  height:42px;
+  border:0;
+  border-radius:9px
+}
+.search-btn{background:var(--primary);color:white}
+.voice-btn{background:var(--input);color:var(--text)}
+.voice-btn.listening{
+  background:var(--danger);
+  color:white;
+  animation:pulse 1s infinite
+}
+#voiceStatus{
+  min-height:20px;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:7px
+}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 0 rgba(239,68,68,.5)}
+  70%{box-shadow:0 0 0 12px transparent}
+  100%{box-shadow:0 0 0 0 transparent}
+}
+
+/* WELCOME */
+.welcome{
+  margin:22px 0;
+  padding:27px;
+  border-radius:18px;
+  color:white;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  box-shadow:var(--shadow)
+}
+.welcome h2{margin-bottom:8px}
+.welcome p{line-height:1.6;opacity:.94}
+
+/* SECTIONS */
+.section{
+  margin-bottom:40px;
+  scroll-margin-top:20px
+}
+.section-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:15px
+}
+.section-header p{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:4px
+}
+
+/* NOTES */
+.add-note{
+  display:grid;
+  grid-template-columns:1fr 2fr auto;
+  gap:9px;
+  margin-bottom:18px
+}
+.input{
+  width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--card);
+  color:var(--text);
+  outline:none
+}
+.add-btn{
+  border:0;
+  background:var(--primary);
+  color:#fff;
+  padding:0 18px;
+  border-radius:9px;
+  font-weight:bold
+}
+.notes-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+  gap:16px
+}
+.note{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:18px;
+  box-shadow:var(--shadow);
+  min-height:200px;
+  display:flex;
+  flex-direction:column
+}
+.note.pinned{border:2px solid var(--warning)}
+.note-title{font-weight:bold;font-size:18px;margin-bottom:9px}
+.note-content{
+  color:var(--muted);
+  white-space:pre-wrap;
+  line-height:1.55;
+  flex:1
+}
+.note-date{font-size:11px;color:var(--muted);margin-top:10px}
+.note-actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:13px
+}
+.small-btn{
+  border:1px solid var(--border);
+  background:var(--input);
+  color:var(--text);
+  padding:7px 9px;
+  border-radius:7px
+}
+
+/* SUBJECTS */
+.subjects-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(210px,1fr));
+  gap:13px
+}
+.subject-card{
+  background:var(--card);
+  color:var(--text);
+  text-decoration:none;
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:16px;
+  transition:.2s
+}
+.subject-card:hover{
+  transform:translateY(-3px);
+  border-color:var(--primary);
+  box-shadow:var(--shadow)
+}
+.subject-icon{
+  display:block;
+  font-size:27px;
+  margin-bottom:7px
+}
+.subject-card small{
+  display:block;
+  color:var(--muted);
+  margin-top:6px;
+  line-height:1.4
+}
+
+/* VIDEOS */
+.video-section{
+  padding:22px;
+  background:rgba(79,70,229,.06);
+  border:1px solid var(--border);
+  border-radius:19px
+}
+.video-search{
+  display:flex;
+  gap:9px;
+  margin-bottom:18px
+}
+.video-search input{
+  flex:1;
+  padding:13px;
+  border:1px solid var(--border);
+  border-radius:9px;
+  background:var(--card);
+  color:var(--text);
+  outline:none
+}
+.video-search button{
+  border:0;
+  background:#ff0000;
+  color:#fff;
+  border-radius:9px;
+  padding:0 18px;
+  font-weight:bold
+}
+.video-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(285px,1fr));
+  gap:17px
+}
+.video-card{
+  overflow:hidden;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:14px;
+  box-shadow:var(--shadow)
+}
+.video-thumb{
+  height:155px;
+  background:linear-gradient(135deg,#111827,#374151);
+  display:grid;
+  place-items:center
+}
+.play{
+  width:60px;
+  height:60px;
+  background:red;
+  color:#fff;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  font-size:25px
+}
+.video-body{padding:16px}
+.video-body h3{margin-bottom:7px}
+.video-body p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  margin-bottom:10px
+}
+.video-meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:11px
+}
+.rating{color:var(--warning)}
+.subject-pill{
+  background:rgba(79,70,229,.1);
+  color:var(--primary);
+  padding:5px 8px;
+  border-radius:20px;
+  font-size:11px
+}
+.video-actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:7px
+}
+.watch{
+  background:#ff0000;
+  color:#fff;
+  text-decoration:none;
+  text-align:center;
+  padding:10px;
+  border-radius:8px
+}
+.download{
+  background:var(--success);
+  color:#fff;
+  border:0;
+  border-radius:8px;
+  padding:10px
+}
+.reactions{
+  display:flex;
+  gap:6px;
+  margin-top:10px
+}
+.reaction{
+  padding:8px 10px;
+  border:1px solid var(--border);
+  background:var(--input);
+  color:var(--text);
+  border-radius:8px
+}
+.reaction.like-active{
+  color:var(--success);
+  border-color:var(--success)
+}
+.reaction.dislike-active{
+  color:var(--danger);
+  border-color:var(--danger)
+}
+
+/* COMMENTS */
+.comments{
+  border-top:1px solid var(--border);
+  margin-top:12px;
+  padding-top:12px
+}
+.comments h4{margin-bottom:8px}
+.comment-row{display:flex;gap:6px}
+.comment-row input{
+  flex:1;
+  min-width:0;
+  padding:9px;
+  border:1px solid var(--border);
+  border-radius:8px;
+  background:var(--input);
+  color:var(--text);
+  outline:none
+}
+.comment-row button{
+  border:0;
+  background:var(--primary);
+  color:#fff;
+  padding:0 12px;
+  border-radius:8px
+}
+.comment{
+  background:var(--input);
+  border-radius:8px;
+  padding:9px;
+  margin-top:8px;
+  font-size:13px
+}
+.comment strong{display:block;margin-bottom:3px}
+.comment small{color:var(--muted);display:block;margin-top:4px}
+
+/* REVIEWS */
+.review-box{
+  border-top:1px solid var(--border);
+  margin-top:22px;
+  padding-top:20px
+}
+.review-form{
+  display:grid;
+  grid-template-columns:1fr 120px auto;
+  gap:7px
+}
+.review-form input,
+.review-form select,
+.review-form button{
+  padding:11px;
+  border:1px solid var(--border);
+  border-radius:8px
+}
+.review-form input,
+.review-form select{
+  background:var(--card);
+  color:var(--text)
+}
+.review-form button{
+  background:var(--primary);
+  color:#fff;
+  border:0
+}
+.review-text{margin-top:8px}
+.user-reviews{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:10px;
+  margin-top:15px
+}
+.user-review{
+  padding:13px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:10px
+}
+.user-review p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  margin:6px 0
+}
+
+/* TASKBAR */
+.taskbar{
+  position:fixed;
+  bottom:0;
+  left:245px;
+  right:0;
+  height:70px;
+  background:rgba(255,255,255,.94);
+  backdrop-filter:blur(14px);
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  z-index:30
+}
+body.dark .taskbar{background:rgba(15,23,42,.94)}
+.task-btn{
+  border:0;
+  background:transparent;
+  color:var(--muted);
+  min-width:65px;
+  padding:7px;
+  border-radius:9px;
+  font-size:11px
+}
+.task-btn span{
+  display:block;
+  font-size:19px;
+  margin-bottom:3px
+}
+.task-btn:hover{
+  color:var(--primary);
+  background:rgba(79,70,229,.1)
+}
+
+/* MODAL */
+.modal-bg{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.6);
+  z-index:100;
+  justify-content:center;
+  align-items:center;
+  padding:20px
+}
+.modal-bg.show{display:flex}
+.modal{
+  width:min(560px,100%);
+  background:var(--card);
+  border-radius:17px;
+  padding:24px
+}
+.modal h2{margin-bottom:15px}
+.modal textarea{
+  min-height:160px;
+  resize:vertical;
+  margin-top:9px
+}
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  margin-top:14px
+}
+.cancel{
+  border:0;
+  background:var(--input);
+  color:var(--text);
+  padding:10px 16px;
+  border-radius:8px
+}
+
+/* EMPTY */
+.empty{
+  grid-column:1/-1;
+  text-align:center;
+  padding:40px;
+  color:var(--muted)
+}
+
+/* MOBILE */
+@media(max-width:800px){
+  .sidebar{display:none}
+  .main{margin-left:0;padding:18px}
+  .taskbar{
+    left:0;
+    overflow-x:auto;
+    justify-content:flex-start
+  }
+  .add-note{grid-template-columns:1fr}
+  .add-btn{padding:13px}
+  .review-form{grid-template-columns:1fr}
+  .video-search{flex-direction:column}
+  .video-search button{padding:13px}
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     AUTHENTICATION
+====================================================== -->
+
+<div id="authScreen" class="auth-screen">
+
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <div class="logo-box">TNT</div>
+
+      <div>
+        <strong>TheNotesTutor</strong>
+        <div style="color:var(--muted);font-size:12px">
+          TNT Learning Platform
+        </div>
+      </div>
+    </div>
+
+    <h1 id="authTitle">Welcome to TNT</h1>
+
+    <p id="authDescription">
+      Sign in to access your notes, reviews and learning resources.
+    </p>
+
+    <div id="authError" class="auth-error hidden"></div>
+
+    <div id="registerFields" class="hidden">
+
+      <div class="form-group">
+        <label>Username</label>
+        <input
+          id="registerUsername"
+          class="form-input"
+          placeholder="Your username"
+        >
+      </div>
+
+    </div>
+
+    <div class="form-group">
+      <label>Email</label>
+      <input
+        id="authEmail"
+        type="email"
+        class="form-input"
+        placeholder="you@example.com"
+      >
+    </div>
+
+    <div class="form-group">
+      <label>Password</label>
+      <input
+        id="authPassword"
+        type="password"
+        class="form-input"
+        placeholder="Password"
+      >
+    </div>
+
+    <button
+      id="authSubmit"
+      class="primary-btn auth-submit"
+      onclick="submitAuth()"
+    >
+      Sign In
+    </button>
+
+    <div class="auth-switch">
+
+      <span id="authSwitchText">
+        Don't have an account?
+      </span>
+
+      <button onclick="toggleAuthMode()">
+        <span id="authSwitchButton">Create account</span>
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     APPLICATION
+====================================================== -->
+
+<div id="app" class="hidden">
+
+  <aside class="sidebar">
+
+    <div class="logo">
+
+      <div class="logo-box">
+        TNT
+      </div>
+
+      <span>
+        TheNotesTutor
+      </span>
+
+    </div>
+
+    <div class="nav-title">
+      Workspace
+    </div>
+
+    <button class="nav-btn" onclick="showAllNotes()">
+      📝 All Notes
+    </button>
+
+    <button class="nav-btn" onclick="showPinnedNotes()">
+      📌 Pinned
+    </button>
+
+    <button class="nav-btn" onclick="focusSearch()">
+      🔍 Search
+    </button>
+
+    <div class="nav-title">
+      Learning
+    </div>
+
+    <button class="nav-btn" onclick="showSubjects()">
+      🌍 Subjects
+    </button>
+
+    <button class="nav-btn" onclick="showVideos()">
+      🎬 Video Reviews
+    </button>
+
+    <div class="nav-title">
+      Actions
+    </div>
+
+    <button class="nav-btn" onclick="focusTitle()">
+      ➕ New Note
+    </button>
+
+    <button class="nav-btn" onclick="logout()">
+      🚪 Log Out
+    </button>
+
+    <div class="user-box">
+      <strong id="sidebarUsername">TNT User</strong>
+      <small id="sidebarEmail"></small>
+    </div>
+
+  </aside>
+
+
+  <main class="main">
+
+    <div class="topbar">
+
+      <div class="page-title">
+
+        <h1>
+          TheNotesTutor <span>(TNT)</span>
+        </h1>
+
+        <p>
+          Learn • Write • Review • Share
+        </p>
+
+      </div>
+
+      <div class="top-actions">
+
+        <button
+          class="icon-btn"
+          onclick="toggleDarkMode()"
+        >
+          🌙
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-bar">
+
+      <span>🔍</span>
+
+      <input
+        id="searchInput"
+        placeholder="Search notes, subjects and videos..."
+        onkeydown="
+          if(event.key==='Enter') globalSearch()
+        "
+      >
+
+      <button
+        id="voiceBtn"
+        class="voice-btn"
+        onclick="startVoiceSearch()"
+        title="Voice search"
+      >
+        🎤
+      </button>
+
+      <button
+        class="search-btn"
+        onclick="globalSearch()"
+      >
+        ➜
+      </button>
+
+    </div>
+
+    <div id="voiceStatus"></div>
+
+
+    <section class="welcome">
+
+      <h2>
+        Welcome to TheNotesTutor 📚
+      </h2>
+
+      <p>
+        Your personal learning workspace for notes,
+        educational videos, reviews, discussions and
+        resources across many subjects.
+      </p>
+
+    </section>
+
+
+    <!-- NOTES -->
+
+    <section id="notesSection" class="section">
+
+      <div class="section-header">
+
+        <div>
+          <h2 id="sectionTitle">
+            📝 My Notes
+          </h2>
+
+          <p>
+            Your notes are stored in the TNT database.
+          </p>
+        </div>
+
+        <span id="noteCount"></span>
+
+      </div>
+
+
+      <div class="add-note">
+
+        <input
+          id="noteTitle"
+          class="input"
+          placeholder="Note title..."
+        >
+
+        <input
+          id="noteContent"
+          class="input"
+          placeholder="Write your note..."
+        >
+
+        <button
+          class="add-btn"
+          onclick="addNote()"
+        >
+          + Add Note
+        </button>
+
+      </div>
+
+
+      <div
+        id="notesGrid"
+        class="notes-grid"
+      ></div>
+
+    </section>
+
+
+    <!-- VIDEOS -->
+
+    <section id="videoSection" class="section">
+
+      <div class="section-header">
+
+        <div>
+          <h2>
+            🎬 TNT Video Reviews
+          </h2>
+
+          <p>
+            Search educational videos and interact with resources.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="video-section">
+
+        <div class="video-search">
+
+          <input
+            id="videoSearch"
+            placeholder="Search Mathematics, Physics, Biology..."
+          >
+
+          <button onclick="searchVideos()">
+            ▶ Search
+          </button>
+
+        </div>
+
+
+        <div
+          id="videoGrid"
+          class="video-grid"
+        ></div>
+
+
+        <div class="review-box">
+
+          <h3>
+            ⭐ Community Reviews
+          </h3>
+
+          <div
+            style="
+              color:var(--muted);
+              font-size:13px;
+              margin:6px 0 13px
+            "
+          >
+            Review an educational video or learning resource.
+          </div>
+
+
+          <div class="review-form">
+
+            <input
+              id="reviewVideo"
+              placeholder="Video/topic"
+            >
+
+            <select id="reviewRating">
+
+              <option value="5">★★★★★</option>
+              <option value="4">★★★★☆</option>
+              <option value="3">★★★☆☆</option>
+              <option value="2">★★☆☆☆</option>
+              <option value="1">★☆☆☆☆</option>
+
+            </select>
+
+            <button onclick="addReview()">
+              Submit
+            </button>
+
+          </div>
+
+
+          <input
+            id="reviewText"
+            class="input review-text"
+            placeholder="Write your review..."
+          >
+
+
+          <div
+            id="userReviews"
+            class="user-reviews"
+          ></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- SUBJECTS -->
+
+    <section id="subjectsSection" class="section">
+
+      <div class="section-header">
+
+        <div>
+          <h2>🌍 Subjects</h2>
+          <p>
+            Explore resources across different fields.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div
+        id="subjectsGrid"
+        class="subjects-grid"
+      ></div>
+
+    </section>
+
+  </main>
+
+
+  <!-- TASKBAR -->
+
+  <nav class="taskbar">
+
+    <button class="task-btn" onclick="goHome()">
+      <span>🏠</span>
+      Home
+    </button>
+
+    <button class="task-btn" onclick="showAllNotes()">
+      <span>📝</span>
+      Notes
+    </button>
+
+    <button class="task-btn" onclick="showSubjects()">
+      <span>🌍</span>
+      Subjects
+    </button>
+
+    <button class="task-btn" onclick="showVideos()">
+      <span>🎬</span>
+      Videos
+    </button>
+
+    <button class="task-btn" onclick="focusSearch()">
+      <span>🔍</span>
+      Search
+    </button>
+
+    <button class="task-btn" onclick="startVoiceSearch()">
+      <span>🎤</span>
+      Voice
+    </button>
+
+    <button class="task-btn" onclick="focusTitle()">
+      <span>➕</span>
+      New
+    </button>
+
+    <button class="task-btn" onclick="toggleDarkMode()">
+      <span>🌙</span>
+      Theme
+    </button>
+
+  </nav>
+
+</div>
+
+
+<!-- EDIT NOTE -->
+
+<div id="editModal" class="modal-bg">
+
+  <div class="modal">
+
+    <h2>
+      ✏️ Edit Note
+    </h2>
+
+    <input
+      id="editTitle"
+      class="input"
+      placeholder="Title"
+    >
+
+    <textarea
+      id="editContent"
+      class="input"
+      placeholder="Content"
+    ></textarea>
+
+    <div class="modal-actions">
+
+      <button
+        class="cancel"
+        onclick="closeEdit()"
+      >
+        Cancel
+      </button>
+
+      <button
+        class="primary-btn"
+        onclick="saveEdit()"
+      >
+        Save
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   TNT ONE-FILE DATABASE
+========================================================= */
+
+const DB_NAME="TNT_WholeWebsiteDatabase";
+const DB_VERSION=1;
+
+let db;
+
+const stores=[
+  "users",
+  "notes",
+  "subjects",
+  "videos",
+  "reactions",
+  "comments",
+  "reviews",
+  "shares",
+  "downloads"
+];
+
+
+function openDatabase(){
+
+  return new Promise((resolve,reject)=>{
+
+    const request=
+      indexedDB.open(DB_NAME,DB_VERSION);
+
+    request.onupgradeneeded=e=>{
+
+      db=e.target.result;
+
+      if(!db.objectStoreNames.contains("users")){
+
+        const users=
+          db.createObjectStore(
+            "users",
+            {keyPath:"id",autoIncrement:true}
+          );
+
+        users.createIndex(
+          "email",
+          "email",
+          {unique:true}
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("notes")){
+
+        const notes=
+          db.createObjectStore(
+            "notes",
+            {keyPath:"id",autoIncrement:true}
+          );
+
+        notes.createIndex(
+          "userId",
+          "userId"
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("subjects")){
+
+        db.createObjectStore(
+          "subjects",
+          {keyPath:"id",autoIncrement:true}
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("videos")){
+
+        db.createObjectStore(
+          "videos",
+          {keyPath:"id",autoIncrement:true}
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("reactions")){
+
+        const reactions=
+          db.createObjectStore(
+            "reactions",
+            {keyPath:"id",autoIncrement:true}
+          );
+
+        reactions.createIndex(
+          "contentKey",
+          "contentKey"
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("comments")){
+
+        const comments=
+          db.createObjectStore(
+            "comments",
+            {keyPath:"id",autoIncrement:true}
+          );
+
+        comments.createIndex(
+          "contentKey",
+          "contentKey"
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("reviews")){
+
+        db.createObjectStore(
+          "reviews",
+          {keyPath:"id",autoIncrement:true}
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("shares")){
+
+        db.createObjectStore(
+          "shares",
+          {keyPath:"id",autoIncrement:true}
+        );
+
+      }
+
+
+      if(!db.objectStoreNames.contains("downloads")){
+
+        db.createObjectStore(
+          "downloads",
+          {keyPath:"id",autoIncrement:true}
+        );
+
+      }
+
+    };
+
+
+    request.onsuccess=e=>{
+
+      db=e.target.result;
+
+      resolve(db);
+
+    };
+
+
+    request.onerror=()=>{
+
+      reject(request.error);
+
+    };
+
+  });
+
+}
+
+
+function transaction(store,mode="readonly"){
+
+  return db.transaction(
+    store,
+    mode
+  ).objectStore(store);
+
+}
+
+
+function dbAdd(store,data){
+
+  return new Promise((resolve,reject)=>{
+
+    const req=
+      transaction(store,"readwrite")
+      .add(data);
+
+    req.onsuccess=
+      ()=>resolve(req.result);
+
+    req.onerror=
+      ()=>reject(req.error);
+
+  });
+
+}
+
+
+function dbPut(store,data){
+
+  return new Promise((resolve,reject)=>{
+
+    const req=
+      transaction(store,"readwrite")
+      .put(data);
+
+    req.onsuccess=
+      ()=>resolve(req.result);
+
+    req.onerror=
+      ()=>reject(req.error);
+
+  });
+
+}
+
+
+function dbGet(store,key){
+
+  return new Promise((resolve,reject)=>{
+
+    const req=
+      transaction(store)
+      .get(key);
+
+    req.onsuccess=
+      ()=>resolve(req.result);
+
+    req.onerror=
+      ()=>reject(req.error);
+
+  });
+
+}
+
+
+function dbAll(store){
+
+  return new Promise((resolve,reject)=>{
+
+    const req=
+      transaction(store)
+      .getAll();
+
+    req.onsuccess=
+      ()=>resolve(req.result);
+
+    req.onerror=
+      ()=>reject(req.error);
+
+  });
+
+}
+
+
+function dbDelete(store,key){
+
+  return new Promise((resolve,reject)=>{
+
+    const req=
+      transaction(store,"readwrite")
+      .delete(key);
+
+    req.onsuccess=
+      ()=>resolve();
+
+    req.onerror=
+      ()=>reject(req.error);
+
+  });
+
+}
+
+
+/* =========================================================
+   SESSION
+========================================================= */
+
+let currentUser=
+  JSON.parse(
+    sessionStorage.getItem("tntCurrentUser")
+  ) || null;
+
+function saveSession(){
+
+  if(currentUser){
+
+    sessionStorage.setItem(
+      "tntCurrentUser",
+      JSON.stringify(currentUser)
+    );
+
+  }else{
+
+    sessionStorage.removeItem(
+      "tntCurrentUser"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+let authMode="login";
+
+
+function toggleAuthMode(){
+
+  authMode=
+    authMode==="login"
+    ?"register"
+    :"login";
+
+
+  const registerFields=
+    document.getElementById(
+      "registerFields"
+    );
+
+  const title=
+    document.getElementById(
+      "authTitle"
+    );
+
+  const description=
+    document.getElementById(
+      "authDescription"
+    );
+
+  const submit=
+    document.getElementById(
+      "authSubmit"
+    );
+
+  const switchText=
+    document.getElementById(
+      "authSwitchText"
+    );
+
+  const switchButton=
+    document.getElementById(
+      "authSwitchButton"
+    );
+
+
+  if(authMode==="register"){
+
+    registerFields.classList.remove(
+      "hidden"
+    );
+
+    title.textContent=
+      "Create your TNT account";
+
+    description.textContent=
+      "Create an account for your TNT workspace.";
+
+    submit.textContent=
+      "Create Account";
+
+    switchText.textContent=
+      "Already have an account?";
+
+    switchButton.textContent=
+      "Sign in";
+
+  }else{
+
+    registerFields.classList.add(
+      "hidden"
+    );
+
+    title.textContent=
+      "Welcome to TNT";
+
+    description.textContent=
+      "Sign in to access your notes and learning resources.";
+
+    submit.textContent=
+      "Sign In";
+
+    switchText.textContent=
+      "Don't have an account?";
+
+    switchButton.textContent=
+      "Create account";
+
+  }
+
+}
+
+
+async function hashPassword(password){
+
+  const data=
+    new TextEncoder().encode(password);
+
+  const hash=
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
+
+  return Array
+    .from(new Uint8Array(hash))
+    .map(b=>b.toString(16).padStart(2,"0"))
+    .join("");
+
+}
+
+
+async function submitAuth(){
+
+  const email=
+    document.getElementById(
+      "authEmail"
+    ).value.trim().toLowerCase();
+
+  const password=
+    document.getElementById(
+      "authPassword"
+    ).value;
+
+  const error=
+    document.getElementById(
+      "authError"
+    );
+
+
+  error.classList.add("hidden");
+
+
+  if(!email || !password){
+
+    error.textContent=
+      "Please enter your email and password.";
+
+    error.classList.remove("hidden");
+
+    return;
+
+  }
+
+
+  const passwordHash=
+    await hashPassword(password);
+
+
+  if(authMode==="register"){
+
+    const username=
+      document.getElementById(
+        "registerUsername"
+      ).value.trim();
+
+
+    if(!username){
+
+      error.textContent=
+        "Please enter a username.";
+
+      error.classList.remove("hidden");
+
+      return;
+
+    }
+
+
+    const users=
+      await dbAll("users");
+
+
+    if(
+      users.some(
+        u=>u.email===email
+      )
+    ){
+
+      error.textContent=
+        "An account with that email already exists.";
+
+      error.classList.remove("hidden");
+
+      return;
+
+    }
+
+
+    const user={
+
+      username,
+
+      email,
+
+      passwordHash,
+
+      createdAt:
+        new Date().toISOString()
+
+    };
+
+
+    const id=
+      await dbAdd(
+        "users",
+        user
+      );
+
+
+    currentUser={
+      id,
+      username,
+      email
+    };
+
+
+    saveSession();
+
+    enterApp();
+
+  }else{
+
+    const users=
+      await dbAll("users");
+
+
+    const user=
+      users.find(
+        u=>u.email===email &&
+           u.passwordHash===passwordHash
+      );
+
+
+    if(!user){
+
+      error.textContent=
+        "Incorrect email or password.";
+
+      error.classList.remove("hidden");
+
+      return;
+
+    }
+
+
+    currentUser={
+      id:user.id,
+      username:user.username,
+      email:user.email
+    };
+
+
+    saveSession();
+
+    enterApp();
+
+  }
+
+}
+
+
+function logout(){
+
+  currentUser=null;
+
+  saveSession();
+
+  document
+    .getElementById("app")
+    .classList.add("hidden");
+
+  document
+    .getElementById("authScreen")
+    .classList.remove("hidden");
+
+}
+
+
+/* =========================================================
+   APP START
+========================================================= */
+
+async function enterApp(){
+
+  document
+    .getElementById("authScreen")
+    .classList.add("hidden");
+
+  document
+    .getElementById("app")
+    .classList.remove("hidden");
+
+
+  document.getElementById(
+    "sidebarUsername"
+  ).textContent=
+    currentUser.username;
+
+
+  document.getElementById(
+    "sidebarEmail"
+  ).textContent=
+    currentUser.email;
+
+
+  await loadSubjects();
+
+  await loadVideos();
+
+  await renderNotes();
+
+  await renderReviews();
+
+  await searchVideos();
+
+}
+
+
+/* =========================================================
+   SUBJECTS
+========================================================= */
+
+const SUBJECT_DATA=[
+
+["📐","Mathematics","Algebra, geometry and calculus","https://www.khanacademy.org/math"],
+["⚛️","Physics","Mechanics, energy and waves","https://www.khanacademy.org/science/physics"],
+["🧪","Chemistry","Atoms, reactions and compounds","https://www.khanacademy.org/science/chemistry"],
+["🧬","Biology","Cells, genetics and organisms","https://www.khanacademy.org/science/biology"],
+["💻","Computer Science","Programming and computing","https://www.w3schools.com/"],
+["🌐","Web Development","HTML, CSS and JavaScript","https://developer.mozilla.org/"],
+["🤖","Artificial Intelligence","AI and machine learning","https://developers.google.com/machine-learning"],
+["📊","Data Science","Data analysis and statistics","https://www.kaggle.com/learn"],
+["🌍","Geography","Earth and environments","https://education.nationalgeographic.org/"],
+["📜","History","Historical events and civilizations","https://www.history.com/"],
+["💰","Economics","Markets, money and trade","https://www.investopedia.com/"],
+["📈","Business","Business and entrepreneurship","https://www.coursera.org/browse/business"],
+["⚖️","Law","Legal concepts","https://www.law.cornell.edu/"],
+["🩺","Medicine","Medical science","https://www.who.int/"],
+["🧠","Psychology","Mind and behavior","https://www.psychologytoday.com/"],
+["🎨","Art & Design","Art and visual design","https://www.moma.org/"],
+["🎵","Music","Music education","https://www.musictheory.net/"],
+["🌱","Agriculture","Agriculture and food systems","https://www.fao.org/"],
+["🌿","Environmental Science","Climate and ecosystems","https://www.unep.org/"],
+["🚀","Astronomy","Space science","https://science.nasa.gov/"],
+["🏗️","Engineering","Engineering and technology","https://www.britannica.com/technology/engineering"],
+["🔐","Cybersecurity","Security and information protection","https://www.cisa.gov/"],
+["🧑‍🏫","Education","Teaching and learning","https://www.unesco.org/en/education"],
+["🤔","Philosophy","Logic, ethics and knowledge","https://plato.stanford.edu/"],
+["🌎","International Relations","Global affairs","https://www.cfr.org/"],
+["🔬","Scientific Research","Research resources","https://www.science.gov/"],
+["🧮","Statistics","Probability and statistics","https://www.itl.nist.gov/div898/handbook/"],
+["🌊","Oceanography","Oceans and marine science","https://oceanservice.noaa.gov/"]
+
+];
+
+
+async function loadSubjects(){
+
+  const existing=
+    await dbAll("subjects");
+
+
+  if(!existing.length){
+
+    for(const s of SUBJECT_DATA){
+
+      await dbAdd(
+        "subjects",
+        {
+          icon:s[0],
+          name:s[1],
+          description:s[2],
+          url:s[3]
+        }
+      );
+
+    }
+
+  }
+
+
+  renderSubjects();
+
+}
+
+
+async function renderSubjects(){
+
+  const subjects=
+    await dbAll("subjects");
+
+  const grid=
+    document.getElementById(
+      "subjectsGrid"
+    );
+
+
+  grid.innerHTML=
+    subjects.map(s=>`
+
+      <a
+        class="subject-card"
+        href="${s.url}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+
+        <span class="subject-icon">
+          ${escapeHTML(s.icon)}
+        </span>
+
+        <strong>
+          ${escapeHTML(s.name)}
+        </strong>
+
+        <small>
+          ${escapeHTML(s.description)}
+        </small>
+
+      </a>
+
+    `).join("");
+
+}
+
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+let noteFilter="all";
+let editingNoteId=null;
+
+
+async function addNote(){
+
+  const title=
+    document.getElementById(
+      "noteTitle"
+    ).value.trim();
+
+  const content=
+    document.getElementById(
+      "noteContent"
+    ).value.trim();
+
+
+  if(!title && !content){
+
+    alert("Write something first.");
+
+    return;
+
+  }
+
+
+  await dbAdd(
+    "notes",
+    {
+      userId:currentUser.id,
+      title:title || "Untitled Note",
+      content,
+      pinned:false,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+
+  document.getElementById(
+    "noteTitle"
+  ).value="";
+
+  document.getElementById(
+    "noteContent"
+  ).value="";
+
+
+  await renderNotes();
+
+}
+
+
+async function getUserNotes(){
+
+  const all=
+    await dbAll("notes");
+
+  return all.filter(
+    n=>n.userId===currentUser.id
+  );
+
+}
+
+
+async function renderNotes(){
+
+  let notes=
+    await getUserNotes();
+
+
+  if(noteFilter==="pinned"){
+
+    notes=
+      notes.filter(n=>n.pinned);
+
+  }
+
+
+  const grid=
+    document.getElementById(
+      "notesGrid"
+    );
+
+
+  document.getElementById(
+    "noteCount"
+  ).textContent=
+    notes.length+" notes";
+
+
+  if(!notes.length){
+
+    grid.innerHTML=`
+
+      <div class="empty">
+
+        <div style="font-size:40px">
+          📝
+        </div>
+
+        <h3>
+          No notes yet
+        </h3>
+
+        <p>
+          Create your first TNT note above.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  grid.innerHTML=
+    notes.map(n=>`
+
+      <article class="note ${
+        n.pinned?"pinned":""
+      }">
+
+        <div class="note-title">
+          ${escapeHTML(n.title)}
+        </div>
+
+        <div class="note-content">
+          ${escapeHTML(n.content)}
+        </div>
+
+        <div class="note-date">
+          ${new Date(n.createdAt).toLocaleString()}
+        </div>
+
+        <div class="note-actions">
+
+          <button
+            class="small-btn"
+            onclick="togglePin(${n.id})"
+          >
+            ${n.pinned?"📌":"📍"}
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="editNote(${n.id})"
+          >
+            ✏️ Edit
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="downloadNote(${n.id})"
+          >
+            📥 Download
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="shareNote(${n.id})"
+          >
+            🔗 Share
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="deleteNote(${n.id})"
+          >
+            🗑️
+          </button>
+
+        </div>
+
+      </article>
+
+    `).join("");
+
+}
+
+
+async function togglePin(id){
+
+  const note=
+    await dbGet("notes",id);
+
+  if(!note)return;
+
+  note.pinned=!note.pinned;
+
+  await dbPut("notes",note);
+
+  await renderNotes();
+
+}
+
+
+async function deleteNote(id){
+
+  if(!confirm("Delete this note?"))return;
+
+  await dbDelete("notes",id);
+
+  await renderNotes();
+
+}
+
+
+async function editNote(id){
+
+  const note=
+    await dbGet("notes",id);
+
+  if(!note)return;
+
+  editingNoteId=id;
+
+  document.getElementById(
+    "editTitle"
+  ).value=note.title;
+
+  document.getElementById(
+    "editContent"
+  ).value=note.content;
+
+  document.getElementById(
+    "editModal"
+  ).classList.add("show");
+
+}
+
+
+async function saveEdit(){
+
+  const note=
+    await dbGet(
+      "notes",
+      editingNoteId
+    );
+
+  if(!note)return;
+
+  note.title=
+    document.getElementById(
+      "editTitle"
+    ).value.trim() || "Untitled Note";
+
+  note.content=
+    document.getElementById(
+      "editContent"
+    ).value.trim();
+
+  await dbPut("notes",note);
+
+  closeEdit();
+
+  await renderNotes();
+
+}
+
+
+function closeEdit(){
+
+  document.getElementById(
+    "editModal"
+  ).classList.remove("show");
+
+  editingNoteId=null;
+
+}
+
+
+/* =========================================================
+   DOWNLOAD NOTES
+========================================================= */
+
+async function downloadNote(id){
+
+  const note=
+    await dbGet("notes",id);
+
+  if(!note)return;
+
+
+  const text=
+`TheNotesTutor (TNT)
+====================
+
+Title:
+${note.title}
+
+Created:
+${new Date(note.createdAt).toLocaleString()}
+
+Content:
+${note.content}
+
+====================
+`;
+
+  const blob=
+    new Blob(
+      [text],
+      {type:"text/plain"}
+    );
+
+  const url=
+    URL.createObjectURL(blob);
+
+  const link=
+    document.createElement("a");
+
+  link.href=url;
+
+  link.download=
+    safeFilename(note.title)+".txt";
+
+  link.click();
+
+  URL.revokeObjectURL(url);
+
+
+  await dbAdd(
+    "downloads",
+    {
+      userId:currentUser.id,
+      contentType:"note",
+      contentId:id,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SHARE NOTE
+========================================================= */
+
+async function shareNote(id){
+
+  const note=
+    await dbGet("notes",id);
+
+  if(!note)return;
+
+
+  const text=
+`${note.title}
+
+${note.content}
+
+Shared from TheNotesTutor (TNT).`;
+
+
+  if(navigator.share){
+
+    try{
+
+      await navigator.share({
+
+        title:note.title,
+
+        text
+
+      });
+
+    }catch(e){}
+
+  }else{
+
+    await copyText(text);
+
+    alert(
+      "The note has been copied to your clipboard."
+    );
+
+  }
+
+
+  await dbAdd(
+    "shares",
+    {
+      userId:currentUser.id,
+      contentType:"note",
+      contentId:id,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+}
+
+
+/* =========================================================
+   VIDEOS
+========================================================= */
+
+const VIDEO_DATA=[
+
+{
+  title:"Mathematics Learning",
+  description:"Mathematics lessons and explanations.",
+  subject:"Mathematics",
+  search:"mathematics educational lessons",
+  rating:5
+},
+
+{
+  title:"Physics Learning",
+  description:"Physics concepts, experiments and lessons.",
+  subject:"Physics",
+  search:"physics educational lessons",
+  rating:5
+},
+
+{
+  title:"Chemistry Learning",
+  description:"Chemistry concepts and experiments.",
+  subject:"Chemistry",
+  search:"chemistry educational lessons",
+  rating:5
+},
+
+{
+  title:"Biology Learning",
+  description:"Biology, cells, genetics and life science.",
+  subject:"Biology",
+  search:"biology educational lessons",
+  rating:5
+},
+
+{
+  title:"Computer Science",
+  description:"Programming and computer science education.",
+  subject:"Computer Science",
+  search:"computer science educational lessons",
+  rating:5
+},
+
+{
+  title:"Artificial Intelligence",
+  description:"AI and machine learning education.",
+  subject:"Artificial Intelligence",
+  search:"artificial intelligence educational lessons",
+  rating:4
+},
+
+{
+  title:"History",
+  description:"History lessons and educational documentaries.",
+  subject:"History",
+  search:"history educational lessons",
+  rating:4
+},
+
+{
+  title:"Economics",
+  description:"Economics and financial education.",
+  subject:"Economics",
+  search:"economics educational lessons",
+  rating:4
+},
+
+{
+  title:"Astronomy",
+  description:"Space, planets, stars and astronomy.",
+  subject:"Astronomy",
+  search:"astronomy educational lessons",
+  rating:5
+},
+
+{
+  title:"Cybersecurity",
+  description:"Cybersecurity education and fundamentals.",
+  subject:"Cybersecurity",
+  search:"cybersecurity educational lessons",
+  rating:4
+}
+
+];
+
+
+async function loadVideos(){
+
+  const existing=
+    await dbAll("videos");
+
+
+  if(!existing.length){
+
+    for(const v of VIDEO_DATA){
+
+      await dbAdd(
+        "videos",
+        v
+      );
+
+    }
+
+  }
+
+}
+
+
+async function videoKey(video){
+
+  return "video:"+video.subject;
+
+}
+
+
+async function getReactions(videoId){
+
+  const all=
+    await dbAll("reactions");
+
+  return all.filter(
+    r=>r.contentType==="video" &&
+       r.contentId===videoId
+  );
+
+}
+
+
+async function renderVideoComments(videoId){
+
+  const all=
+    await dbAll("comments");
+
+  const comments=
+    all.filter(
+      c=>c.contentType==="video" &&
+         c.contentId===videoId
+    );
+
+
+  if(!comments.length){
+
+    return `
+      <p style="
+        color:var(--muted);
+        font-size:12px;
+        margin-top:8px
+      ">
+        No comments yet.
+      </p>
+    `;
+
+  }
+
+
+  return Promise.all(
+    comments.map(async c=>{
+
+      const user=
+        await dbGet(
+          "users",
+          c.userId
+        );
+
+      return `
+
+        <div class="comment">
+
+          <strong>
+            ${escapeHTML(
+              user?.username || "TNT User"
+            )}
+          </strong>
+
+          <div>
+            ${escapeHTML(c.text)}
+          </div>
+
+          <small>
+            ${new Date(c.createdAt).toLocaleString()}
+          </small>
+
+        </div>
+
+      `;
+
+    })
+  ).then(x=>x.join(""));
+
+}
+
+
+async function searchVideos(){
+
+  let query=
+    document.getElementById(
+      "videoSearch"
+    ).value.trim().toLowerCase();
+
+
+  const videos=
+    await dbAll("videos");
+
+
+  let results=
+    query
+    ? videos.filter(v=>
+        v.title.toLowerCase().includes(query) ||
+        v.description.toLowerCase().includes(query) ||
+        v.subject.toLowerCase().includes(query)
+      )
+    : videos;
+
+
+  if(query && !results.length){
+
+    results=[{
+
+      id:"search-"+query,
+
+      title:
+        query+" Educational Videos",
+
+      description:
+        "Search educational videos about "+query,
+
+      subject:query,
+
+      search:query+" educational videos",
+
+      rating:0,
+
+      temporary:true
+
+    }];
+
+  }
+
+
+  const grid=
+    document.getElementById(
+      "videoGrid"
+    );
+
+
+  const cards=[];
+
+
+  for(const video of results){
+
+    const reactions=
+      video.temporary
+      ? []
+      : await getReactions(video.id);
+
+
+    const likes=
+      reactions.filter(
+        r=>r.reaction==="like"
+      ).length;
+
+    const dislikes=
+      reactions.filter(
+        r=>r.reaction==="dislike"
+      ).length;
+
+    const mine=
+      reactions.find(
+        r=>r.userId===currentUser.id
+      );
+
+
+    const comments=
+      video.temporary
+      ? []
+      : await renderVideoComments(
+          video.id
+        );
+
+
+    const key=
+      String(video.id);
+
+
+    cards.push(`
+
+      <article class="video-card">
+
+        <div class="video-thumb">
+
+          <div class="play">
+            ▶
+          </div>
+
+        </div>
+
+
+        <div class="video-body">
+
+          <h3>
+            ${escapeHTML(video.title)}
+          </h3>
+
+          <p>
+            ${escapeHTML(video.description)}
+          </p>
+
+
+          <div class="video-meta">
+
+            <span class="rating">
+
+              ${
+                video.rating
+                ? "★".repeat(video.rating)
+                : "NEW"
+              }
+
+            </span>
+
+            <span class="subject-pill">
+              ${escapeHTML(video.subject)}
+            </span>
+
+          </div>
+
+
+          <div class="video-actions">
+
+            <a
+              class="watch"
+              href="${youtubeSearch(video.search)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              onclick="recordShare(${video.temporary?"'temporary'":video.id},'video')"
+            >
+              ▶ Watch
+            </a>
+
+            <button
+              class="download"
+              onclick="downloadVideo(${video.temporary?"'temporary'":video.id})"
+            >
+              📥 Download
+            </button>
+
+          </div>
+
+
+          <div class="reactions">
+
+            <button
+              class="reaction ${
+                mine?.reaction==="like"
+                ?"like-active":""
+              }"
+              onclick="${
+                video.temporary
+                ? `alert('Search results cannot be rated until a video is added to the TNT database.')`
+                : `reactToVideo(${video.id},'like')`
+              }"
+            >
+              👍 ${likes}
+            </button>
+
+
+            <button
+              class="reaction ${
+                mine?.reaction==="dislike"
+                ?"dislike-active":""
+              }"
+              onclick="${
+                video.temporary
+                ? `alert('Search results cannot be rated until a video is added to the TNT database.')`
+                : `reactToVideo(${video.id},'dislike')`
+              }"
+            >
+              👎 ${dislikes}
+            </button>
+
+
+            <button
+              class="reaction"
+              onclick="${
+                video.temporary
+                ? `copyText('${escapeAttribute(youtubeSearch(video.search))}').then(()=>alert('Link copied.'))`
+                : `shareVideo(${video.id})`
+              }"
+            >
+              🔗 Share
+            </button>
+
+          </div>
+
+
+          ${
+            video.temporary
+            ? ""
+            : `
+
+            <div class="comments">
+
+              <h4>
+                💬 Comments
+              </h4>
+
+              <div class="comment-row">
+
+                <input
+                  id="comment-${video.id}"
+                  placeholder="Write a comment..."
+                  onkeydown="
+                    if(event.key==='Enter')
+                    addComment(${video.id})
+                  "
+                >
+
+                <button
+                  onclick="addComment(${video.id})"
+                >
+                  Send
+                </button>
+
+              </div>
+
+              ${comments}
+
+            </div>
+
+            `
+          }
+
+        </div>
+
+      </article>
+
+    `);
+
+  }
+
+
+  grid.innerHTML=
+    cards.join("");
+
+}
+
+
+/* =========================================================
+   VIDEO LIKE / DISLIKE
+========================================================= */
+
+async function reactToVideo(
+  videoId,
+  reaction
+){
+
+  const all=
+    await dbAll("reactions");
+
+
+  const existing=
+    all.find(
+      r=>
+        r.userId===currentUser.id &&
+        r.contentType==="video" &&
+        r.contentId===videoId
+    );
+
+
+  if(existing){
+
+    if(existing.reaction===reaction){
+
+      await dbDelete(
+        "reactions",
+        existing.id
+      );
+
+    }else{
+
+      existing.reaction=reaction;
+
+      await dbPut(
+        "reactions",
+        existing
+      );
+
+    }
+
+  }else{
+
+    await dbAdd(
+      "reactions",
+      {
+        userId:currentUser.id,
+        contentType:"video",
+        contentId:videoId,
+        reaction,
+        createdAt:new Date().toISOString()
+      }
+    );
+
+  }
+
+
+  await searchVideos();
+
+}
+
+
+/* =========================================================
+   COMMENTS
+========================================================= */
+
+async function addComment(videoId){
+
+  const input=
+    document.getElementById(
+      "comment-"+videoId
+    );
+
+
+  if(!input)return;
+
+
+  const text=
+    input.value.trim();
+
+
+  if(!text)return;
+
+
+  await dbAdd(
+    "comments",
+    {
+      userId:currentUser.id,
+      contentType:"video",
+      contentId:videoId,
+      text,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+
+  input.value="";
+
+  await searchVideos();
+
+}
+
+
+/* =========================================================
+   VIDEO SHARING
+========================================================= */
+
+async function shareVideo(videoId){
+
+  const video=
+    await dbGet(
+      "videos",
+      videoId
+    );
+
+  if(!video)return;
+
+
+  const url=
+    youtubeSearch(video.search);
+
+
+  if(navigator.share){
+
+    try{
+
+      await navigator.share({
+
+        title:
+          video.title,
+
+        text:
+          "Educational video from TheNotesTutor (TNT).",
+
+        url
+
+      });
+
+    }catch(e){}
+
+  }else{
+
+    await copyText(url);
+
+    alert(
+      "Video link copied to your clipboard."
+    );
+
+  }
+
+
+  await recordShare(
+    videoId,
+    "video"
+  );
+
+}
+
+
+async function recordShare(
+  contentId,
+  contentType
+){
+
+  if(contentId==="temporary")return;
+
+  await dbAdd(
+    "shares",
+    {
+      userId:currentUser.id,
+      contentId,
+      contentType,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+}
+
+
+/* =========================================================
+   VIDEO DOWNLOAD
+========================================================= */
+
+async function downloadVideo(videoId){
+
+  if(videoId==="temporary"){
+
+    alert(
+      "This is a search result. TNT cannot download arbitrary third-party videos. Use the video's authorized download option."
+    );
+
+    return;
+
+  }
+
+
+  const video=
+    await dbGet(
+      "videos",
+      videoId
+    );
+
+
+  if(!video)return;
+
+
+  /*
+    If you add a direct downloadable file URL
+    such as an authorized MP4 to video.downloadUrl,
+    TNT can download it here.
+  */
+
+  if(!video.downloadUrl){
+
+    alert(
+      "This video does not have an authorized direct download file. " +
+      "For third-party platforms, use their official download feature."
+    );
+
+    return;
+
+  }
+
+
+  const link=
+    document.createElement("a");
+
+  link.href=
+    video.downloadUrl;
+
+  link.download=
+    safeFilename(video.title)+".mp4";
+
+  link.target="_blank";
+
+  link.click();
+
+
+  await dbAdd(
+    "downloads",
+    {
+      userId:currentUser.id,
+      contentType:"video",
+      contentId:videoId,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+}
+
+
+/* =========================================================
+   VIDEO REVIEWS
+========================================================= */
+
+async function addReview(){
+
+  const video=
+    document.getElementById(
+      "reviewVideo"
+    ).value.trim();
+
+  const rating=
+    Number(
+      document.getElementById(
+        "reviewRating"
+      ).value
+    );
+
+  const text=
+    document.getElementById(
+      "reviewText"
+    ).value.trim();
+
+
+  if(!video || !text){
+
+    alert(
+      "Enter a video/topic and review."
+    );
+
+    return;
+
+  }
+
+
+  await dbAdd(
+    "reviews",
+    {
+      userId:currentUser.id,
+      video,
+      rating,
+      text,
+      createdAt:new Date().toISOString()
+    }
+  );
+
+
+  document.getElementById(
+    "reviewVideo"
+  ).value="";
+
+  document.getElementById(
+    "reviewText"
+  ).value="";
+
+
+  await renderReviews();
+
+}
+
+
+async function renderReviews(){
+
+  const reviews=
+    await dbAll("reviews");
+
+
+  const box=
+    document.getElementById(
+      "userReviews"
+    );
+
+
+  if(!reviews.length){
+
+    box.innerHTML=
+      `<div class="empty">
+        No community reviews yet.
+      </div>`;
+
+    return;
+
+  }
+
+
+  const output=[];
+
+
+  for(const review of reviews){
+
+    const user=
+      await dbGet(
+        "users",
+        review.userId
+      );
+
+
+    output.push(`
+
+      <div class="user-review">
+
+        <strong>
+          ${escapeHTML(review.video)}
+        </strong>
+
+        <div class="rating">
+
+          ${"★".repeat(review.rating)}
+          ${"☆".repeat(5-review.rating)}
+
+        </div>
+
+        <p>
+          ${escapeHTML(review.text)}
+        </p>
+
+        <small style="color:var(--muted)">
+
+          ${escapeHTML(
+            user?.username || "TNT User"
+          )}
+
+          ·
+
+          ${new Date(
+            review.createdAt
+          ).toLocaleString()}
+
+        </small>
+
+      </div>
+
+    `);
+
+  }
+
+
+  box.innerHTML=
+    output.join("");
+
+}
+
+
+/* =========================================================
+   VOICE SEARCH
+========================================================= */
+
+const SpeechRecognition=
+  window.SpeechRecognition ||
+  window.webkitSpeechRecognition;
+
+let recognition=null;
+
+
+if(SpeechRecognition){
+
+  recognition=
+    new SpeechRecognition();
+
+  recognition.continuous=false;
+
+  recognition.interimResults=true;
+
+  recognition.lang="en-US";
+
+
+  recognition.onresult=
+    event=>{
+
+      let text="";
+
+
+      for(
+        let i=event.resultIndex;
+        i<event.results.length;
+        i++
+      ){
+
+        text+=
+          event.results[i][0].transcript;
+
+      }
+
+
+      document.getElementById(
+        "searchInput"
+      ).value=text;
+
+
+      document.getElementById(
+        "voiceStatus"
+      ).textContent=
+        "🎙️ "+text;
+
+
+      globalSearch();
+
+    };
+
+
+  recognition.onend=
+    ()=>{
+
+      document.getElementById(
+        "voiceBtn"
+      ).classList.remove(
+        "listening"
+      );
+
+    };
+
+}
+
+
+function startVoiceSearch(){
+
+  if(!recognition){
+
+    alert(
+      "Voice search is not supported by this browser."
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    recognition.start();
+
+    document.getElementById(
+      "voiceBtn"
+    ).classList.add(
+      "listening"
+    );
+
+    document.getElementById(
+      "voiceStatus"
+    ).textContent=
+      "🎙️ Listening...";
+
+  }catch(e){}
+
+}
+
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+async function globalSearch(){
+
+  const query=
+    document.getElementById(
+      "searchInput"
+    ).value.trim().toLowerCase();
+
+
+  if(!query){
+
+    noteFilter="all";
+
+    document.getElementById(
+      "sectionTitle"
+    ).textContent="📝 My Notes";
+
+    await renderNotes();
+
+    await renderSubjects();
+
+    return;
+
+  }
+
+
+  const notes=
+    await getUserNotes();
+
+
+  const matches=
+    notes.filter(
+      n=>
+        n.title.toLowerCase().includes(query) ||
+        n.content.toLowerCase().includes(query)
+    );
+
+
+  document.getElementById(
+    "sectionTitle"
+  ).textContent=
+    `🔎 Results for "${query}"`;
+
+
+  const grid=
+    document.getElementById(
+      "notesGrid"
+    );
+
+
+  grid.innerHTML=
+    matches.length
+    ? matches.map(n=>`
+
+      <article class="note">
+
+        <div class="note-title">
+          ${escapeHTML(n.title)}
+        </div>
+
+        <div class="note-content">
+          ${escapeHTML(n.content)}
+        </div>
+
+        <div class="note-actions">
+
+          <button
+            class="small-btn"
+            onclick="downloadNote(${n.id})"
+          >
+            📥 Download
+          </button>
+
+          <button
+            class="small-btn"
+            onclick="shareNote(${n.id})"
+          >
+            🔗 Share
+          </button>
+
+        </div>
+
+      </article>
+
+    `).join("")
+    : `<div class="empty">
+         No matching notes.
+       </div>`;
+
+
+  document.getElementById(
+    "videoSearch"
+  ).value=query;
+
+
+  await searchVideos();
+
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function goHome(){
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+async function showAllNotes(){
+
+  noteFilter="all";
+
+  document.getElementById(
+    "sectionTitle"
+  ).textContent="📝 My Notes";
+
+  await renderNotes();
+
+  document.getElementById(
+    "notesSection"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+async function showPinnedNotes(){
+
+  noteFilter="pinned";
+
+  document.getElementById(
+    "sectionTitle"
+  ).textContent="📌 Pinned Notes";
+
+  await renderNotes();
+
+  document.getElementById(
+    "notesSection"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function showSubjects(){
+
+  document.getElementById(
+    "subjectsSection"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function showVideos(){
+
+  document.getElementById(
+    "videoSection"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+}
+
+
+function focusSearch(){
+
+  document.getElementById(
+    "searchInput"
+  ).focus();
+
+}
+
+
+function focusTitle(){
+
+  document.getElementById(
+    "notesSection"
+  ).scrollIntoView({
+    behavior:"smooth"
+  });
+
+  document.getElementById(
+    "noteTitle"
+  ).focus();
+
+}
+
+
+/* =========================================================
+   DARK MODE
+========================================================= */
+
+function toggleDarkMode(){
+
+  document.body.classList.toggle("dark");
+
+  localStorage.setItem(
+    "tntDarkMode",
+    document.body.classList.contains("dark")
+  );
+
+}
+
+
+if(
+  localStorage.getItem("tntDarkMode")==="true"
+){
+
+  document.body.classList.add("dark");
+
+}
+
+
+/* =========================================================
+   CLIPBOARD
+========================================================= */
+
+async function copyText(text){
+
+  if(navigator.clipboard){
+
+    await navigator.clipboard.writeText(text);
+
+    return;
+
+  }
+
+
+  const area=
+    document.createElement("textarea");
+
+  area.value=text;
+
+  document.body.appendChild(area);
+
+  area.select();
+
+  document.execCommand("copy");
+
+  area.remove();
+
+}
+
+
+/* =========================================================
+   UTILITIES
+========================================================= */
+
+function escapeHTML(value){
+
+  return String(value)
+
+    .replace(/&/g,"&amp;")
+
+    .replace(/</g,"&lt;")
+
+    .replace(/>/g,"&gt;")
+
+    .replace(/"/g,"&quot;")
+
+    .replace(/'/g,"&#039;");
+
+}
+
+
+function escapeAttribute(value){
+
+  return String(value)
+    .replace(/\\/g,"\\\\")
+    .replace(/'/g,"\\'")
+    .replace(/"/g,"&quot;");
+
+}
+
+
+function safeFilename(name){
+
+  return String(name)
+    .replace(/[<>:"/\\|?*]+/g,"")
+    .replace(/\s+/g,"-")
+    .slice(0,80)
+    || "TNT-file";
+
+}
+
+
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+(async function(){
+
+  try{
+
+    await openDatabase();
+
+    if(currentUser){
+
+      const user=
+        await dbGet(
+          "users",
+          currentUser.id
+        );
+
+      if(user){
+
+        currentUser={
+          id:user.id,
+          username:user.username,
+          email:user.email
+        };
+
+        saveSession();
+
+        await enterApp();
+
+      }else{
+
+        logout();
+
+      }
+
+    }
+
+  }catch(error){
+
+    console.error(error);
+
+    alert(
+      "TNT could not open its local database. Please use a modern browser."
+    );
+
+  }
+
+})();
+
+</script>
+
+</body>
+</html>
